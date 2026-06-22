@@ -344,7 +344,7 @@
                 ctx.fillStyle = '#6c757d';
                 ctx.font = '11px -apple-system, sans-serif';
                 ctx.textAlign = 'right';
-                ctx.fillText(val >= 1000 ? (val / 1000).toFixed(1) + 'k' : val.toFixed(1), padL - 8, y + 4);
+                ctx.fillText(val >= 1000 ? Math.round(val / 1000) + 'k' : Math.round(val), padL - 8, y + 4);
             }
 
             // X labels
