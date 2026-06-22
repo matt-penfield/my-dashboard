@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FastForward Logistics — Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #f8f9fa;
+            --surface: #ffffff;
+            --text: #1a1a2e;
+            --text-secondary: #6c757d;
+            --border: #e9ecef;
+            --primary: #2563eb;
+            --primary-light: #dbeafe;
+            --success: #16a34a;
+            --warning: #d97706;
+            --danger: #dc2626;
+            --radius: 12px;
+            --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+            padding: 24px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        header h1 span {
+            color: var(--primary);
+        }
+
+        .btn-analysis {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-analysis:hover { background: #1d4ed8; }
+
+        /* KPI Cards */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .kpi-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .kpi-card .label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+
+        .kpi-card .value {
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+
+        .kpi-card .trend {
+            font-size: 0.8rem;
+            margin-top: 4px;
+        }
+
+        .trend.up { color: var(--success); }
+        .trend.down { color: var(--danger); }
+        .trend.neutral { color: var(--warning); }
+
+        /* Charts */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .chart-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .chart-card h3 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--text);
+        }
+
+        canvas {
+            width: 100% !important;
+            height: 220px !important;
+        }
+
+        /* Analysis Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 28px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+
+        .modal h2 {
+            font-size: 1.125rem;
+            margin-bottom: 16px;
+        }
+
+        .modal .insight {
+            padding: 12px 16px;
+            background: var(--primary-light);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        .modal .btn-close {
+            margin-top: 16px;
+            background: none;
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.875rem;
+        }
+
+        .modal .btn-close:hover { background: var(--bg); }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .charts-grid { grid-template-columns: 1fr; }
+            body { padding: 16px; }
+        }
+
+        @media (max-width: 480px) {
+            .kpi-grid { grid-template-columns: 1fr; }
+            header h1 { font-size: 1.25rem; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><span>FastForward</span> Logistics Dashboard</h1>
+        <button class="btn-analysis" onclick="showAnalysis()">Performance Analysis</button>
+    </header>
+
+    <section class="kpi-grid">
+        <div class="kpi-card">
+            <div class="label">Shipment Volume (YTD)</div>
+            <div class="value" id="kpi-volume">—</div>
+            <div class="trend up" id="kpi-volume-trend"></div>
+        </div>
+        <div class="kpi-card">
+            <div class="label">On-Time Delivery Rate</div>
+            <div class="value" id="kpi-otd">—</div>
+            <div class="trend down" id="kpi-otd-trend"></div>
+        </div>
+        <div class="kpi-card">
+            <div class="label">Regional Performance</div>
+            <div class="value" id="kpi-regional">—</div>
+            <div class="trend neutral" id="kpi-regional-trend"></div>
+        </div>
+        <div class="kpi-card">
+            <div class="label">Open Exceptions</div>
+            <div class="value" id="kpi-exceptions">—</div>
+            <div class="trend down" id="kpi-exceptions-trend"></div>
+        </div>
+    </section>
+
+    <section class="charts-grid">
+        <div class="chart-card">
+            <h3>Shipment Volume (Monthly)</h3>
+            <canvas id="chart-volume"></canvas>
+        </div>
+        <div class="chart-card">
+            <h3>On-Time Delivery Rate (%)</h3>
+            <canvas id="chart-otd"></canvas>
+        </div>
+        <div class="chart-card">
+            <h3>Regional Performance Score</h3>
+            <canvas id="chart-regional"></canvas>
+        </div>
+        <div class="chart-card">
+            <h3>Open Exceptions</h3>
+            <canvas id="chart-exceptions"></canvas>
+        </div>
+    </section>
+
+    <div class="modal-overlay" id="modal" onclick="closeModal(event)">
+        <div class="modal">
+            <h2>Performance Analysis</h2>
+            <div id="analysis-content"></div>
+            <button class="btn-close" onclick="document.getElementById('modal').classList.remove('active')">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA GENERATION ---
+        const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+        // Shipment volume: gradual increase month over month
+        const shipmentVolume = [];
+        let vol = 4200;
+        for (let i = 0; i < 12; i++) {
+            vol += Math.round(180 + Math.random() * 120);
+            shipmentVolume.push(vol);
+        }
+
+        // On-time delivery: gradually decreasing with variance, correlated with volume increase
+        const onTimeDelivery = [];
+        let otd = 96.2;
+        for (let i = 0; i < 12; i++) {
+            otd -= (0.3 + Math.random() * 0.5);
+            otd += (Math.random() - 0.5) * 0.3; // variance
+            onTimeDelivery.push(Math.round(otd * 10) / 10);
+        }
+
+        // Open exceptions: gradually increasing, correlated with volume
+        const openExceptions = [];
+        let exc = 34;
+        for (let i = 0; i < 12; i++) {
+            exc += Math.round(3 + Math.random() * 5);
+            exc += Math.round((Math.random() - 0.4) * 3); // variance
+            openExceptions.push(exc);
+        }
+
+        // Regional performance: varies, loosely correlated with shipment rates
+        const regionalPerformance = [];
+        for (let i = 0; i < 12; i++) {
+            const base = 78 + (shipmentVolume[i] - 4200) / 300;
+            const score = base + (Math.random() - 0.5) * 8;
+            regionalPerformance.push(Math.round(score * 10) / 10);
+        }
+
+        // --- POPULATE KPIs ---
+        const totalVolume = shipmentVolume.reduce((a, b) => a + b, 0);
+        document.getElementById('kpi-volume').textContent = totalVolume.toLocaleString();
+        const volGrowth = ((shipmentVolume[11] - shipmentVolume[0]) / shipmentVolume[0] * 100).toFixed(1);
+        document.getElementById('kpi-volume-trend').textContent = `↑ ${volGrowth}% growth (Jan–Dec)`;
+
+        const avgOTD = (onTimeDelivery.reduce((a, b) => a + b, 0) / 12).toFixed(1);
+        document.getElementById('kpi-otd').textContent = avgOTD + '%';
+        const otdDelta = (onTimeDelivery[11] - onTimeDelivery[0]).toFixed(1);
+        document.getElementById('kpi-otd-trend').textContent = `↓ ${Math.abs(otdDelta)}pp decline (Jan–Dec)`;
+
+        const avgRegional = (regionalPerformance.reduce((a, b) => a + b, 0) / 12).toFixed(1);
+        document.getElementById('kpi-regional').textContent = avgRegional + '/100';
+        document.getElementById('kpi-regional-trend').textContent = `~ Variable across regions`;
+
+        const currentExceptions = openExceptions[11];
+        document.getElementById('kpi-exceptions').textContent = currentExceptions;
+        const excGrowth = ((openExceptions[11] - openExceptions[0]) / openExceptions[0] * 100).toFixed(0);
+        document.getElementById('kpi-exceptions-trend').textContent = `↑ ${excGrowth}% increase (Jan–Dec)`;
+
+        // --- CHART DRAWING ---
+        function drawChart(canvasId, data, color, fillColor, yLabel) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            const dpr = window.devicePixelRatio || 1;
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            ctx.scale(dpr, dpr);
+
+            const w = rect.width;
+            const h = rect.height;
+            const padL = 48, padR = 16, padT = 12, padB = 32;
+            const chartW = w - padL - padR;
+            const chartH = h - padT - padB;
+
+            const min = Math.min(...data) * 0.95;
+            const max = Math.max(...data) * 1.05;
+            const range = max - min || 1;
+
+            // Grid lines
+            ctx.strokeStyle = '#e9ecef';
+            ctx.lineWidth = 1;
+            for (let i = 0; i <= 4; i++) {
+                const y = padT + (chartH / 4) * i;
+                ctx.beginPath();
+                ctx.moveTo(padL, y);
+                ctx.lineTo(padL + chartW, y);
+                ctx.stroke();
+
+                // Y labels
+                const val = max - (range / 4) * i;
+                ctx.fillStyle = '#6c757d';
+                ctx.font = '11px -apple-system, sans-serif';
+                ctx.textAlign = 'right';
+                ctx.fillText(val >= 1000 ? (val / 1000).toFixed(1) + 'k' : val.toFixed(1), padL - 8, y + 4);
+            }
+
+            // X labels
+            ctx.textAlign = 'center';
+            for (let i = 0; i < 12; i++) {
+                const x = padL + (chartW / 11) * i;
+                ctx.fillText(months[i], x, h - 8);
+            }
+
+            // Data points and line
+            const points = data.map((d, i) => ({
+                x: padL + (chartW / 11) * i,
+                y: padT + chartH - ((d - min) / range) * chartH
+            }));
+
+            // Fill
+            ctx.beginPath();
+            ctx.moveTo(points[0].x, padT + chartH);
+            points.forEach(p => ctx.lineTo(p.x, p.y));
+            ctx.lineTo(points[points.length - 1].x, padT + chartH);
+            ctx.closePath();
+            ctx.fillStyle = fillColor;
+            ctx.fill();
+
+            // Line
+            ctx.beginPath();
+            points.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 2.5;
+            ctx.lineJoin = 'round';
+            ctx.stroke();
+
+            // Dots
+            points.forEach(p => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 3.5, 0, Math.PI * 2);
+                ctx.fillStyle = color;
+                ctx.fill();
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            });
+        }
+
+        function renderCharts() {
+            drawChart('chart-volume', shipmentVolume, '#2563eb', 'rgba(37,99,235,0.08)');
+            drawChart('chart-otd', onTimeDelivery, '#16a34a', 'rgba(22,163,74,0.08)');
+            drawChart('chart-regional', regionalPerformance, '#7c3aed', 'rgba(124,58,237,0.08)');
+            drawChart('chart-exceptions', openExceptions, '#dc2626', 'rgba(220,38,38,0.08)');
+        }
+
+        renderCharts();
+        window.addEventListener('resize', renderCharts);
+
+        // --- ANALYSIS ---
+        function showAnalysis() {
+            const insights = [
+                `<strong>Shipment Volume:</strong> Total shipments reached ${totalVolume.toLocaleString()} this year, growing ${volGrowth}% from January to December. The upward trend is consistent, indicating strong demand growth.`,
+                `<strong>On-Time Delivery:</strong> OTD declined from ${onTimeDelivery[0]}% to ${onTimeDelivery[11]}%, a ${Math.abs(otdDelta)}pp drop. This correlates with volume increases—capacity may be strained.`,
+                `<strong>Open Exceptions:</strong> Exceptions grew from ${openExceptions[0]} to ${openExceptions[11]} (+${excGrowth}%). The rising trend tracks closely with volume, suggesting process bottlenecks at scale.`,
+                `<strong>Regional Performance:</strong> Average score of ${avgRegional}/100 with moderate variance. Regions handling higher volumes show slightly lower scores, pointing to uneven capacity distribution.`,
+                `<strong>Recommendation:</strong> Prioritize capacity expansion in underperforming regions. The inverse relationship between volume and OTD suggests the network is approaching saturation. Address the top exception categories to recover delivery performance.`
+            ];
+
+            document.getElementById('analysis-content').innerHTML = insights.map(i => `<div class="insight">${i}</div>`).join('');
+            document.getElementById('modal').classList.add('active');
+        }
+
+        function closeModal(e) {
+            if (e.target === e.currentTarget) {
+                e.currentTarget.classList.remove('active');
+            }
+        }
+    </script>
+</body>
+</html>
