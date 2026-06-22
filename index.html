@@ -310,7 +310,7 @@
         document.getElementById('kpi-exceptions-trend').textContent = `↑ ${excGrowth}% increase (Jan–Dec)`;
 
         // --- CHART DRAWING ---
-        function drawChart(canvasId, data, color, fillColor, yLabel) {
+        function drawChart(canvasId, data, color, fillColor, maxOverride) {
             const canvas = document.getElementById(canvasId);
             const ctx = canvas.getContext('2d');
             const dpr = window.devicePixelRatio || 1;
@@ -326,7 +326,7 @@
             const chartH = h - padT - padB;
 
             const min = Math.min(...data) * 0.95;
-            const max = Math.max(...data) * 1.05;
+            const max = maxOverride || Math.max(...data) * 1.05;
             const range = max - min || 1;
 
             // Grid lines
@@ -391,7 +391,7 @@
 
         function renderCharts() {
             drawChart('chart-volume', shipmentVolume, '#2563eb', 'rgba(37,99,235,0.08)');
-            drawChart('chart-otd', onTimeDelivery, '#16a34a', 'rgba(22,163,74,0.08)');
+            drawChart('chart-otd', onTimeDelivery, '#16a34a', 'rgba(22,163,74,0.08)', 100);
             drawChart('chart-regional', regionalPerformance, '#7c3aed', 'rgba(124,58,237,0.08)');
             drawChart('chart-exceptions', openExceptions, '#dc2626', 'rgba(220,38,38,0.08)');
         }
