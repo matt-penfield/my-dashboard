@@ -131,6 +131,7 @@ const regionalData = computed(() => filteredData.value.map((m) => m.regionalPerf
               :labels="chartLabels"
               color="#ffa726"
               y-suffix="%"
+              y-step-integer
             />
           </v-col>
         </v-row>

@@ -23,6 +23,7 @@ const props = defineProps<{
   color?: string
   fill?: boolean
   ySuffix?: string
+  yStepInteger?: boolean
 }>()
 
 const chartData = computed(() => ({
@@ -59,6 +60,7 @@ const chartOptions = computed(() => ({
       grid: { color: 'rgba(0,0,0,0.06)' },
       ticks: {
         font: { size: 11 },
+        stepSize: props.yStepInteger ? 1 : undefined,
         callback: (value: number | string) => {
           const v = Number(value)
           if (props.ySuffix === '%') return v + '%'
