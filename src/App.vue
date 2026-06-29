@@ -98,6 +98,7 @@ const regionalData = computed(() => filteredData.value.map((m) => m.regionalPerf
               :data="volumeData"
               :labels="chartLabels"
               color="#4285f4"
+              :y-min="10000"
             />
           </v-col>
           <v-col cols="12" md="6">
@@ -108,6 +109,7 @@ const regionalData = computed(() => filteredData.value.map((m) => m.regionalPerf
               :labels="chartLabels"
               color="#00bcd4"
               y-suffix="%"
+              :y-min="80"
             />
           </v-col>
         </v-row>
@@ -120,6 +122,7 @@ const regionalData = computed(() => filteredData.value.map((m) => m.regionalPerf
               :data="exceptionsData"
               :labels="chartLabels"
               color="#ef5350"
+              :y-min="100"
             />
           </v-col>
           <v-col cols="12" md="6">
@@ -131,6 +134,7 @@ const regionalData = computed(() => filteredData.value.map((m) => m.regionalPerf
               color="#ffa726"
               y-suffix="%"
               y-step-integer
+              :y-min="80"
             />
           </v-col>
         </v-row>

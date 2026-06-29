@@ -24,6 +24,7 @@ const props = defineProps<{
   fill?: boolean
   ySuffix?: string
   yStepInteger?: boolean
+  yMin?: number
 }>()
 
 const chartData = computed(() => ({
@@ -57,6 +58,7 @@ const chartOptions = computed(() => ({
       ticks: { font: { size: 11 } },
     },
     y: {
+      min: props.yMin,
       grid: { color: 'rgba(0,0,0,0.06)' },
       ticks: {
         font: { size: 11 },
