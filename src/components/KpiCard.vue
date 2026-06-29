@@ -28,7 +28,7 @@ const trendText = computed(() => {
 </script>
 
 <template>
-  <v-card flat class="rounded-lg pa-2" color="white">
+  <v-card variant="outlined" class="rounded-lg pa-2">
     <v-card-text class="pa-5">
       <div class="text-overline font-weight-bold text-medium-emphasis letter-spacing-wide mb-3">
         {{ label }}
