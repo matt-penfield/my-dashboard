@@ -7,16 +7,16 @@ import ChartCard from '@/components/ChartCard.vue'
 
 const modalOpen = ref(false)
 
-// Placeholder data simulating a year of logistics metrics
-const volumeData = [4380, 4590, 4810, 5020, 5250, 5410, 5630, 5870, 6050, 6280, 6490, 6720]
-const otdData = [95.8, 95.2, 94.6, 94.1, 93.5, 93.0, 92.6, 92.1, 91.4, 91.0, 90.3, 89.8]
-const regionalData = [82, 79, 84, 77, 81, 76, 83, 78, 80, 75, 82, 77]
-const exceptionsData = [38, 44, 49, 55, 60, 67, 72, 79, 84, 91, 97, 104]
+// Monthly data matching the design
+const volumeData = [12200, 13800, 14500, 15100, 16200, 16800, 17100, 17600, 18200, 18900, 19500, 19800]
+const otdData = [94, 93, 93, 92, 91, 90, 89, 88, 91, 90, 87, 85]
+const exceptionsData = [142, 155, 168, 172, 185, 198, 210, 232, 230, 248, 265, 285]
+const regionalData = [88, 87, 89, 86, 88, 85, 87, 89, 86, 88, 86, 85]
 </script>
 
 <template>
   <AppHeader
-    title="Logistics Dashboard"
+    title="Fast Forward Logistics"
     button-label="Performance Analysis"
     @action="modalOpen = true"
   />
@@ -26,52 +26,55 @@ const exceptionsData = [38, 44, 49, 55, 60, 67, 72, 79, 84, 91, 97, 104]
       <!-- KPI Cards Row -->
       <v-row>
         <v-col cols="12" sm="6" lg="3">
-          <KpiCard
-            label="Shipment Volume (YTD)"
-            value="66,500"
-            trend="↑ 53.4% growth (Jan–Dec)"
-            trend-direction="up"
-          />
+          <KpiCard label="Shipment Volume" value="194,250" />
         </v-col>
         <v-col cols="12" sm="6" lg="3">
-          <KpiCard
-            label="On-Time Delivery Rate"
-            value="92.8%"
-            trend="↓ 6.0pp decline (Jan–Dec)"
-            trend-direction="down"
-          />
+          <KpiCard label="On-Time Delivery" value="90.2%" />
         </v-col>
         <v-col cols="12" sm="6" lg="3">
-          <KpiCard
-            label="Regional Performance"
-            value="79.5/100"
-            trend="~ Variable across regions"
-            trend-direction="neutral"
-          />
+          <KpiCard label="Regional Performance" value="86.5%" />
         </v-col>
         <v-col cols="12" sm="6" lg="3">
-          <KpiCard
-            label="Open Exceptions"
-            value="104"
-            trend="↑ 174% increase (Jan–Dec)"
-            trend-direction="down"
-          />
+          <KpiCard label="Open Exceptions" value="2,522" />
         </v-col>
       </v-row>
 
       <!-- Charts Row -->
       <v-row class="mt-4">
         <v-col cols="12" md="6">
-          <ChartCard title="Shipment Volume (Monthly)" :data="volumeData" color="blue" />
+          <ChartCard
+            title="Monthly Shipment Volume"
+            type="bar"
+            :data="volumeData"
+            color="blue"
+          />
         </v-col>
         <v-col cols="12" md="6">
-          <ChartCard title="On-Time Delivery Rate (%)" :data="otdData" color="green" />
+          <ChartCard
+            title="On-Time Delivery Rate"
+            type="line"
+            :data="otdData"
+            color="cyan"
+            y-suffix="%"
+          />
         </v-col>
         <v-col cols="12" md="6">
-          <ChartCard title="Regional Performance Score" :data="regionalData" color="purple" />
+          <ChartCard
+            title="Open Exceptions Trend"
+            type="line"
+            :data="exceptionsData"
+            color="red"
+            :fill="true"
+          />
         </v-col>
         <v-col cols="12" md="6">
-          <ChartCard title="Open Exceptions" :data="exceptionsData" color="red" />
+          <ChartCard
+            title="Regional Performance"
+            type="line"
+            :data="regionalData"
+            color="orange"
+            y-suffix="%"
+          />
         </v-col>
       </v-row>
     </v-container>
@@ -80,13 +83,13 @@ const exceptionsData = [38, 44, 49, 55, 60, 67, 72, 79, 84, 91, 97, 104]
   <AppModal v-model="modalOpen">
     <h2 class="text-h5 font-weight-bold mb-5">Performance Analysis</h2>
     <v-alert type="info" variant="tonal" class="mb-4">
-      Shipment volume grew 53% YTD while on-time delivery declined 6pp — capacity may be strained.
+      Shipment volume grew 62% YTD while on-time delivery declined 9pp — capacity is strained.
     </v-alert>
     <v-alert type="warning" variant="tonal" class="mb-4">
-      Open exceptions rose from 38 to 104, tracking closely with volume increases.
+      Open exceptions doubled from 142 to 285, tracking closely with volume increases.
     </v-alert>
     <v-alert type="success" variant="tonal">
-      Regional performance remains stable at ~79.5 avg despite volume pressure.
+      Regional performance remains stable at ~86.5% avg despite volume pressure.
     </v-alert>
   </AppModal>
 </template>
