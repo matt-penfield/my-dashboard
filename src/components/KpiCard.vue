@@ -10,9 +10,9 @@ const props = defineProps<{
 }>()
 
 const trendColor = computed(() => {
-  if (!props.trend || props.trend === 0) return 'text-medium-emphasis'
+  if (!props.trend || props.trend === 0) return 'grey'
   const positive = props.invert ? props.trend < 0 : props.trend > 0
-  return positive ? 'text-success' : 'text-error'
+  return positive ? 'success' : 'error'
 })
 
 const trendIcon = computed(() => {
@@ -28,16 +28,16 @@ const trendText = computed(() => {
 </script>
 
 <template>
-  <v-card variant="outlined" class="rounded-lg pa-2">
-    <v-card-text class="pa-5">
-      <div class="text-overline font-weight-bold text-medium-emphasis letter-spacing-wide mb-3">
+  <v-card elevation="1" class="rounded-lg">
+    <div class="pa-6">
+      <div class="text-overline font-weight-bold text-medium-emphasis mb-3" style="letter-spacing: 0.08em;">
         {{ label }}
       </div>
       <div class="d-flex align-center">
         <span class="text-h4 font-weight-black">{{ value }}</span>
         <v-chip
           v-if="trend !== undefined && trend !== 0"
-          :color="trendColor.replace('text-', '')"
+          :color="trendColor"
           variant="tonal"
           size="small"
           class="ml-3"
@@ -46,12 +46,6 @@ const trendText = computed(() => {
           {{ trendText }}
         </v-chip>
       </div>
-    </v-card-text>
+    </div>
   </v-card>
 </template>
-
-<style scoped>
-.letter-spacing-wide {
-  letter-spacing: 0.08em;
-}
-</style>
