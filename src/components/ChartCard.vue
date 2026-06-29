@@ -7,18 +7,18 @@ defineProps<{
 </script>
 
 <template>
-  <v-card variant="outlined">
-    <v-card-title class="text-subtitle-2">{{ title }}</v-card-title>
-    <v-card-text>
+  <v-card variant="outlined" class="pa-1">
+    <v-card-title class="text-subtitle-2 font-weight-bold pa-5 pb-0">{{ title }}</v-card-title>
+    <v-card-text class="pa-5 pt-3">
       <v-sparkline
         v-if="data && data.length"
         :model-value="data"
         :color="color || 'primary'"
         :line-width="2"
-        :padding="8"
+        :padding="12"
         smooth
         auto-draw
-        height="120"
+        height="140"
       />
       <div v-else class="chart-placeholder">
         <slot>

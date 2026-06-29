@@ -8,13 +8,13 @@ defineProps<{
 </script>
 
 <template>
-  <v-card variant="outlined">
-    <v-card-text>
-      <div class="text-overline text-medium-emphasis">{{ label }}</div>
-      <div class="text-h4 font-weight-bold mt-1">{{ value }}</div>
+  <v-card variant="outlined" class="pa-1">
+    <v-card-text class="pa-5">
+      <div class="text-overline font-weight-bold text-medium-emphasis mb-2">{{ label }}</div>
+      <div class="text-h4 font-weight-black">{{ value }}</div>
       <div
         v-if="trend"
-        class="text-caption mt-1"
+        class="text-caption mt-2"
         :class="{
           'text-success': trendDirection === 'up',
           'text-error': trendDirection === 'down',

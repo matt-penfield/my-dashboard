@@ -22,7 +22,7 @@ const exceptionsData = [38, 44, 49, 55, 60, 67, 72, 79, 84, 91, 97, 104]
   />
 
   <v-main>
-    <v-container fluid>
+    <v-container fluid class="pa-6">
       <!-- KPI Cards Row -->
       <v-row>
         <v-col cols="12" sm="6" lg="3">
@@ -60,7 +60,7 @@ const exceptionsData = [38, 44, 49, 55, 60, 67, 72, 79, 84, 91, 97, 104]
       </v-row>
 
       <!-- Charts Row -->
-      <v-row class="mt-2">
+      <v-row class="mt-4">
         <v-col cols="12" md="6">
           <ChartCard title="Shipment Volume (Monthly)" :data="volumeData" color="blue" />
         </v-col>
@@ -78,11 +78,11 @@ const exceptionsData = [38, 44, 49, 55, 60, 67, 72, 79, 84, 91, 97, 104]
   </v-main>
 
   <AppModal v-model="modalOpen">
-    <h2 class="text-h6 mb-4">Performance Analysis</h2>
-    <v-alert type="info" variant="tonal" class="mb-3">
+    <h2 class="text-h5 font-weight-bold mb-5">Performance Analysis</h2>
+    <v-alert type="info" variant="tonal" class="mb-4">
       Shipment volume grew 53% YTD while on-time delivery declined 6pp — capacity may be strained.
     </v-alert>
-    <v-alert type="warning" variant="tonal" class="mb-3">
+    <v-alert type="warning" variant="tonal" class="mb-4">
       Open exceptions rose from 38 to 104, tracking closely with volume increases.
     </v-alert>
     <v-alert type="success" variant="tonal">
