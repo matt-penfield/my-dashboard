@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import metrics from './data/metrics.json'
-import KpiCard from './components/KpiCard.vue'
+import MetricCard from './components/MetricCard.vue'
 import ChartCard from './components/ChartCard.vue'
 import AppModal from './components/AppModal.vue'
 
@@ -26,11 +26,14 @@ const kpis = computed(() => {
   const prev = currentIdx > 0 ? metrics[currentIdx - 1] : null
   const curr = metrics[currentIdx]
 
+  const dir = (n: number): 'up' | 'down' | 'neutral' => n > 0 ? 'up' : n < 0 ? 'down' : 'neutral'
+  const dirInvert = (n: number): 'up' | 'down' | 'neutral' => n > 0 ? 'down' : n < 0 ? 'up' : 'neutral'
+
   return {
-    volume: { value: volume.toLocaleString(), trend: prev ? curr.shipmentVolume - prev.shipmentVolume : 0 },
-    otd: { value: otd + '%', trend: prev ? +(curr.onTimeDelivery - prev.onTimeDelivery).toFixed(1) : 0 },
-    regional: { value: regional + '%', trend: prev ? +(curr.regionalPerformance - prev.regionalPerformance).toFixed(1) : 0 },
-    exceptions: { value: exceptions.toLocaleString(), trend: prev ? curr.openExceptions - prev.openExceptions : 0 },
+    volume: { value: volume.toLocaleString(), direction: dir(prev ? curr.shipmentVolume - prev.shipmentVolume : 0) },
+    otd: { value: otd + '%', direction: dir(prev ? curr.onTimeDelivery - prev.onTimeDelivery : 0) },
+    regional: { value: regional + '%', direction: dir(prev ? curr.regionalPerformance - prev.regionalPerformance : 0) },
+    exceptions: { value: exceptions.toLocaleString(), direction: dirInvert(prev ? curr.openExceptions - prev.openExceptions : 0) },
   }
 })
 
@@ -73,16 +76,16 @@ const regionalData = computed(() => filteredData.value.map((m) => m.regionalPerf
         <!-- KPI Cards -->
         <v-row>
           <v-col cols="12" sm="6" lg="3">
-            <KpiCard label="Shipment Volume" :value="kpis.volume.value" :trend="kpis.volume.trend" />
+            <MetricCard label="Shipment Volume" :value="kpis.volume.value" :trend-direction="kpis.volume.direction" />
           </v-col>
           <v-col cols="12" sm="6" lg="3">
-            <KpiCard label="On-Time Delivery" :value="kpis.otd.value" :trend="kpis.otd.trend" suffix="pp" />
+            <MetricCard label="On-Time Delivery" :value="kpis.otd.value" :trend-direction="kpis.otd.direction" />
           </v-col>
           <v-col cols="12" sm="6" lg="3">
-            <KpiCard label="Regional Performance" :value="kpis.regional.value" :trend="kpis.regional.trend" suffix="pp" />
+            <MetricCard label="Regional Performance" :value="kpis.regional.value" :trend-direction="kpis.regional.direction" />
           </v-col>
           <v-col cols="12" sm="6" lg="3">
-            <KpiCard label="Open Exceptions" :value="kpis.exceptions.value" :trend="kpis.exceptions.trend" invert />
+            <MetricCard label="Open Exceptions" :value="kpis.exceptions.value" :trend-direction="kpis.exceptions.direction" />
           </v-col>
         </v-row>
 
