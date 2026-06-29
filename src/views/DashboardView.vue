@@ -15,83 +15,64 @@ const modalOpen = ref(false)
     @action="modalOpen = true"
   />
 
-  <section class="kpi-grid">
-    <KpiCard
-      label="Shipment Volume (YTD)"
-      value="—"
-      trend="Placeholder"
-      trend-direction="up"
-    />
-    <KpiCard
-      label="On-Time Delivery Rate"
-      value="—"
-      trend="Placeholder"
-      trend-direction="down"
-    />
-    <KpiCard
-      label="Regional Performance"
-      value="—"
-      trend="Placeholder"
-      trend-direction="neutral"
-    />
-    <KpiCard
-      label="Open Exceptions"
-      value="—"
-      trend="Placeholder"
-      trend-direction="down"
-    />
-  </section>
+  <v-main>
+    <v-container fluid>
+      <!-- KPI Cards Row -->
+      <v-row>
+        <v-col cols="12" sm="6" lg="3">
+          <KpiCard
+            label="Shipment Volume (YTD)"
+            value="—"
+            trend="Placeholder"
+            trend-direction="up"
+          />
+        </v-col>
+        <v-col cols="12" sm="6" lg="3">
+          <KpiCard
+            label="On-Time Delivery Rate"
+            value="—"
+            trend="Placeholder"
+            trend-direction="down"
+          />
+        </v-col>
+        <v-col cols="12" sm="6" lg="3">
+          <KpiCard
+            label="Regional Performance"
+            value="—"
+            trend="Placeholder"
+            trend-direction="neutral"
+          />
+        </v-col>
+        <v-col cols="12" sm="6" lg="3">
+          <KpiCard
+            label="Open Exceptions"
+            value="—"
+            trend="Placeholder"
+            trend-direction="down"
+          />
+        </v-col>
+      </v-row>
 
-  <section class="charts-grid">
-    <ChartCard title="Shipment Volume (Monthly)" />
-    <ChartCard title="On-Time Delivery Rate (%)" />
-    <ChartCard title="Regional Performance Score" />
-    <ChartCard title="Open Exceptions" />
-  </section>
+      <!-- Charts Row -->
+      <v-row class="mt-2">
+        <v-col cols="12" md="6">
+          <ChartCard title="Shipment Volume (Monthly)" />
+        </v-col>
+        <v-col cols="12" md="6">
+          <ChartCard title="On-Time Delivery Rate (%)" />
+        </v-col>
+        <v-col cols="12" md="6">
+          <ChartCard title="Regional Performance Score" />
+        </v-col>
+        <v-col cols="12" md="6">
+          <ChartCard title="Open Exceptions" />
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-main>
 
-  <AppModal :open="modalOpen" @close="modalOpen = false">
-    <h2>Performance Analysis</h2>
-    <p class="modal-placeholder">Analysis content will go here.</p>
+  <AppModal v-model="modalOpen">
+    <h2 class="text-h6 mb-4">Performance Analysis</h2>
+    <p class="text-body-2 text-medium-emphasis">Analysis content will go here.</p>
   </AppModal>
 </template>
-
-<style scoped>
-.kpi-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  margin-bottom: 28px;
-}
-
-.charts-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-}
-
-.modal-placeholder {
-  color: var(--text-secondary);
-  font-size: 0.875rem;
-  padding: 16px;
-  background: var(--primary-light);
-  border-radius: 8px;
-}
-
-@media (max-width: 1024px) {
-  .kpi-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 768px) {
-  .charts-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 480px) {
-  .kpi-grid {
-    grid-template-columns: 1fr;
-  }
-}
-</style>
