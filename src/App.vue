@@ -5,12 +5,12 @@ import MetricCard from './components/MetricCard.vue'
 import ChartCard from './components/ChartCard.vue'
 import AppModal from './components/AppModal.vue'
 
-const months = ['All', ...metrics.map((m) => m.month)]
-const selectedMonth = ref('All')
+const months = ['All Months', ...metrics.map((m) => m.month)]
+const selectedMonth = ref('All Months')
 const modalOpen = ref(false)
 
 const filteredData = computed(() => {
-  if (selectedMonth.value === 'All') return metrics
+  if (selectedMonth.value === 'All Months') return metrics
   return metrics.filter((m) => m.month === selectedMonth.value)
 })
 
@@ -22,7 +22,7 @@ const kpis = computed(() => {
   const exceptions = data[data.length - 1].openExceptions
 
   // Trend vs previous month
-  const currentIdx = selectedMonth.value === 'All' ? metrics.length - 1 : metrics.findIndex((m) => m.month === selectedMonth.value)
+  const currentIdx = selectedMonth.value === 'All Months' ? metrics.length - 1 : metrics.findIndex((m) => m.month === selectedMonth.value)
   const prev = currentIdx > 0 ? metrics[currentIdx - 1] : null
   const curr = metrics[currentIdx]
 
@@ -63,10 +63,11 @@ const regionalData = computed(() => filteredData.value.map((m) => m.regionalPerf
         <v-select
           v-model="selectedMonth"
           :items="months"
+          label="Date Range"
           variant="outlined"
           density="compact"
           hide-details
-          style="max-width: 140px"
+          style="max-width: 160px"
         />
       </template>
     </v-app-bar>
