@@ -103,7 +103,7 @@ const regionalData = computed(() => filteredData.value.map((m) => m.regionalPerf
           <v-col cols="12" md="6">
             <ChartCard
               title="On-Time Delivery Rate"
-              type="line"
+              type="bar"
               :data="otdData"
               :labels="chartLabels"
               color="#00bcd4"
@@ -116,17 +116,16 @@ const regionalData = computed(() => filteredData.value.map((m) => m.regionalPerf
           <v-col cols="12" md="6">
             <ChartCard
               title="Open Exceptions Trend"
-              type="line"
+              type="bar"
               :data="exceptionsData"
               :labels="chartLabels"
               color="#ef5350"
-              :fill="true"
             />
           </v-col>
           <v-col cols="12" md="6">
             <ChartCard
               title="Regional Performance"
-              type="line"
+              type="bar"
               :data="regionalData"
               :labels="chartLabels"
               color="#ffa726"
