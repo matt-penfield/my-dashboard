@@ -1,0 +1,14 @@
+[
+  { "month": "Jan", "shipmentVolume": 12200, "onTimeDelivery": 94.1, "regionalPerformance": 88.2, "openExceptions": 142 },
+  { "month": "Feb", "shipmentVolume": 13800, "onTimeDelivery": 93.4, "regionalPerformance": 87.1, "openExceptions": 158 },
+  { "month": "Mar", "shipmentVolume": 14500, "onTimeDelivery": 92.8, "regionalPerformance": 89.0, "openExceptions": 171 },
+  { "month": "Apr", "shipmentVolume": 15100, "onTimeDelivery": 91.5, "regionalPerformance": 86.4, "openExceptions": 185 },
+  { "month": "May", "shipmentVolume": 16200, "onTimeDelivery": 90.9, "regionalPerformance": 87.8, "openExceptions": 198 },
+  { "month": "Jun", "shipmentVolume": 16800, "onTimeDelivery": 89.7, "regionalPerformance": 85.3, "openExceptions": 214 },
+  { "month": "Jul", "shipmentVolume": 17400, "onTimeDelivery": 88.5, "regionalPerformance": 86.9, "openExceptions": 229 },
+  { "month": "Aug", "shipmentVolume": 17900, "onTimeDelivery": 87.8, "regionalPerformance": 88.5, "openExceptions": 241 },
+  { "month": "Sep", "shipmentVolume": 18500, "onTimeDelivery": 90.2, "regionalPerformance": 85.8, "openExceptions": 237 },
+  { "month": "Oct", "shipmentVolume": 19100, "onTimeDelivery": 89.1, "regionalPerformance": 87.4, "openExceptions": 256 },
+  { "month": "Nov", "shipmentVolume": 19700, "onTimeDelivery": 87.3, "regionalPerformance": 86.1, "openExceptions": 272 },
+  { "month": "Dec", "shipmentVolume": 20050, "onTimeDelivery": 85.9, "regionalPerformance": 85.5, "openExceptions": 289 }
+]

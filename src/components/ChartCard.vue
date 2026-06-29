@@ -84,14 +84,14 @@ function hexToRgba(hex: string, alpha: number): string {
 </script>
 
 <template>
-  <v-card variant="outlined" class="pa-1">
-    <v-card-title class="text-subtitle-1 font-weight-bold pa-5 pb-0">{{ title }}</v-card-title>
-    <v-card-text class="pa-5 pt-3">
+  <v-card flat class="rounded-lg pa-2" color="white">
+    <v-card-title class="text-subtitle-1 font-weight-bold px-5 pt-5 pb-0">{{ title }}</v-card-title>
+    <v-card-text class="px-5 pb-5 pt-4">
       <div class="chart-container">
         <Bar v-if="type === 'bar' && data?.length" :data="chartData" :options="chartOptions" />
         <Line v-else-if="data?.length" :data="chartData" :options="chartOptions" />
         <div v-else class="chart-placeholder">
-          <span class="text-medium-emphasis text-body-2">Chart Placeholder</span>
+          <span class="text-medium-emphasis text-body-2">No data</span>
         </div>
       </div>
     </v-card-text>
