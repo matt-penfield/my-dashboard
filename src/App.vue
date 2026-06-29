@@ -46,8 +46,8 @@ const regionalData = computed(() => filteredData.value.map((m) => m.regionalPerf
 
 <template>
   <v-app>
-    <v-app-bar flat color="white" border="b" height="64">
-      <v-app-bar-title class="ml-2">
+    <v-app-bar flat color="white" border="b" height="64" class="px-6">
+      <v-app-bar-title>
         <span class="text-h6 font-weight-bold">Fast Forward Logistics</span>
       </v-app-bar-title>
       <template #append>
